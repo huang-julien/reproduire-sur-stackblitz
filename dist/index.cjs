@@ -29980,7 +29980,7 @@ async function main() {
     const result = issue.body.match(/(?:^|\n+)#+\s[^\n]*\n+(.*?)(?=\n+##?\s|$)/gm)?.map((v) => v.trim());
     if (!result)
       return coreExports.info("No heading found");
-    const reproductionSection = result.find((v) => v.toLowerCase().startsWith(coreExports.getInput("reproduction-section")));
+    const reproductionSection = result.find((v) => v.startsWith(coreExports.getInput("reproduction-section")));
     if (!reproductionSection)
       return coreExports.info("No reproduction section found");
     coreExports.info("Reproduction section:" + reproductionSection);

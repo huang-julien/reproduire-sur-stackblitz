@@ -17,7 +17,7 @@ async function main() {
 
         if (!result) return info("No heading found")
 
-        const reproductionSection = result.find(v => v.toLowerCase().startsWith(getInput('reproduction-section')))
+        const reproductionSection = result.find(v => v.startsWith(getInput('reproduction-section')))
         if (!reproductionSection) return info("No reproduction section found")
         info('Reproduction section:' + reproductionSection)
         const ghLink = reproductionSection.match(/github\.com\/([^/ ]+\/[^/ ]+)/g)
