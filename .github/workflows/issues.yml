@@ -4,10 +4,12 @@ jobs:
     reproduire-sur-stackblitz:
         runs-on: ubuntu-latest
         steps:
-        - uses: actions/checkout@v2
-        - name: Test Local Action
-          id: test-action
-          uses: ./
-          with:
-            repo-token: ${{ secrets.GITHUB_TOKEN }}
+          - name: Checkout
+            id: checkout
+            uses: actions/checkout@v4
+          - name: Test Local Action
+            id: test-action
+            uses: ./
+            with:
+              repo-token: ${{ secrets.GITHUB_TOKEN }}
           
