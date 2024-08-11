@@ -1,5 +1,8 @@
 on: [issues]
 
+permissions:
+  issues: write
+
 jobs:
       test-action:
         name: GitHub Actions Test
