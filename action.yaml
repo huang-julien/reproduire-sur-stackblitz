@@ -10,3 +10,6 @@ inputs:
     description: 'The heading of the issue where the reproduction is located.'
     required: false
     default: '## Reproduction'
+runs:
+  using: 'node20'
+  main: 'dist/index.cjs'
