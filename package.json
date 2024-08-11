@@ -11,7 +11,7 @@
   "private": true,
   "main": "./dist/index.cjs",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.cjs"
   },
   "files": [
     "dist",
