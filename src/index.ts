@@ -13,7 +13,7 @@ async function main() {
         } = context
         if (pullRequest || !issue?.body) return info("Not an issue or has no body.")
 
-        const result = issue.body.match(/(?:^|\n)#+\s[^\n]*\n(.*?)(?=\n##?\s|$)/gm)?.map(v => v.trim())
+        const result = issue.body.match(/(?:^|\n+)#+\s[^\n]*\n+(.*?)(?=\n+##?\s|$)/gm)?.map(v => v.trim())
 
         if (!result) return info("No heading found")
 

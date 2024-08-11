@@ -29977,7 +29977,7 @@ async function main() {
     } = context;
     if (pullRequest || !issue?.body)
       return coreExports.info("Not an issue or has no body.");
-    const result = issue.body.match(/(?:^|\n)#+\s[^\n]*\n(.*?)(?=\n##?\s|$)/gm)?.map((v) => v.trim());
+    const result = issue.body.match(/(?:^|\n+)#+\s[^\n]*\n+(.*?)(?=\n+##?\s|$)/gm)?.map((v) => v.trim());
     if (!result)
       return coreExports.info("No heading found");
     const reproductionSection = result.find((v) => v.toLowerCase().startsWith(coreExports.getInput("reproduction-section")));
