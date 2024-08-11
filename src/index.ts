@@ -1,5 +1,5 @@
-import { context, getOctokit } from "@actions/github"
 import { setFailed, info, getInput } from "@actions/core"
+import { context, getOctokit } from "@actions/github"
 import { getStackblitzLinkMessage } from "./message"
 
 async function main() {
