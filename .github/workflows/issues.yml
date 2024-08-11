@@ -1,0 +1,10 @@
+on: [issues]
+
+jobs:
+    reproduire-sur-stackblitz:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v2
+        - uses: ./
+          with:
+            repo-token: ${{ secrets.GITHUB_TOKEN }}
