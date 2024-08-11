@@ -29983,6 +29983,7 @@ async function main() {
     const reproductionSection = result.find((v) => v.toLowerCase().startsWith(coreExports.getInput("reproduction-section")));
     if (!reproductionSection)
       return coreExports.info("No reproduction section found");
+    coreExports.info("Reproduction section:" + reproductionSection);
     const ghLink = reproductionSection.match(/github\.com\/([^/ ]+\/[^/ ]+)/g);
     if (!ghLink || !ghLink.length)
       return coreExports.info("No github repo found");

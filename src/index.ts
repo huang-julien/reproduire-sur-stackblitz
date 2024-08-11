@@ -19,7 +19,7 @@ async function main() {
 
         const reproductionSection = result.find(v => v.toLowerCase().startsWith(getInput('reproduction-section')))
         if (!reproductionSection) return info("No reproduction section found")
-
+        info('Reproduction section:' + reproductionSection)
         const ghLink = reproductionSection.match(/github\.com\/([^/ ]+\/[^/ ]+)/g)
         if (!ghLink || !ghLink.length) return info("No github repo found")
 
