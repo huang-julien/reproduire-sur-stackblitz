@@ -12,13 +12,12 @@ async function main() {
             }
         } = context
         if (pullRequest || !issue?.body) return info("Not an issue or has no body.")
-            info('reproduction section: ' + getInput('reproduction-section'))
-            info(issue.body)
-        const result = issue.body.match(/(?:^|\n+)#+\s[^\n]*\n+(.*?)(?=\n+##?\s|$)/gm)?.map(v => v.trim())
+        const result = issue.body.match(/(?:^|\n+)#+\s\S[^\n]*\n+(.*?)(?=\n+##?\s\S|$)/gm)?.map(v => v.trim())
+        info('issue content --> ' + issue.body)
+         if (!result) return info("No heading found")
+            info('headings: ' + JSON.stringify(result))
 
-        if (!result) return info("No heading found")
-
-        const reproductionSection = result.find(v => v.startsWith(getInput('reproduction-section')))
+        const reproductionSection = result.find(v => v.startsWith(getInput('reproduction-heading')))
         if (!reproductionSection) return info("No reproduction section found")
         info('Reproduction section:' + reproductionSection)
         const ghLink = reproductionSection.match(/github\.com\/([^/ ]+\/[^/ ]+)/g)

@@ -29946,12 +29946,12 @@ async function main() {
     } = context;
     if (pullRequest || !issue?.body)
       return coreExports.info("Not an issue or has no body.");
-    coreExports.info("reproduction section: " + coreExports.getInput("reproduction-section"));
-    coreExports.info(issue.body);
-    const result = issue.body.match(/(?:^|\n+)#+\s[^\n]*\n+(.*?)(?=\n+##?\s|$)/gm)?.map((v) => v.trim());
+    const result = issue.body.match(/(?:^|\n+)#+\s\S[^\n]*\n+(.*?)(?=\n+##?\s\S|$)/gm)?.map((v) => v.trim());
+    coreExports.info("issue content --> " + issue.body);
     if (!result)
       return coreExports.info("No heading found");
-    const reproductionSection = result.find((v) => v.startsWith(coreExports.getInput("reproduction-section")));
+    coreExports.info("headings: " + JSON.stringify(result));
+    const reproductionSection = result.find((v) => v.startsWith(coreExports.getInput("reproduction-heading")));
     if (!reproductionSection)
       return coreExports.info("No reproduction section found");
     coreExports.info("Reproduction section:" + reproductionSection);
