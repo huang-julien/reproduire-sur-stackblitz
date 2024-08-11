@@ -1,0 +1,12 @@
+name: reproduire-sur-stackblitz
+description: Generate a stackblitz link in issues with a github reprository reproduction.
+author: huang-julien
+inputs:
+  repo-token:
+    description: 'Token for the repository. Can be passed in using `{{ secrets.GITHUB_TOKEN }}`.'
+    required: false
+    default: ${{ github.token }}
+  reproduction-heading:
+    description: 'The heading of the issue where the reproduction is located.'
+    required: false
+    default: '## Reproduction'
