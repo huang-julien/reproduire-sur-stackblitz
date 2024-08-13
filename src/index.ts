@@ -1,6 +1,6 @@
 import { setFailed, info, getInput } from "@actions/core"
 import { context, getOctokit } from "@actions/github"
-import { getStackblitzLinkMessage } from "./message"
+import { splitMarkdownByHeadings, getStackblitzLinkMessage, getRepo } from "./utils"
 
 async function main() {
     try {
@@ -12,31 +12,25 @@ async function main() {
             }
         } = context
         if (pullRequest || !issue?.body) return info("Not an issue or has no body.")
-        const result = issue.body.replace(/\r\n/g, '\n').match(/(?<title>^#{1,6} .*)(?<content>(?:\n(?!#{1,6} ).*)*)/gm)?.map(v => v.trim())
-        info('issue content --> ' + issue.body)
-         if (!result) return info("No heading found")
-            info('headings: ' + JSON.stringify(result))
+        const result = splitMarkdownByHeadings(issue.body)
+
+        if (!result) return info("No heading found")
 
         const reproductionSection = result.find(v => v.startsWith(getInput('reproduction-heading')))
         if (!reproductionSection) return info("No reproduction section found")
-        info('Reproduction section:' + reproductionSection)
-        const ghLink = reproductionSection.match(/github\.com\/([^/ ]+\/[^/ ]+)/g)
-        if (!ghLink || !ghLink.length) return info("No github repo found")
 
-        const linkRepo = ghLink[0].replace(/github\.com\/([^/ ]+\/[^/ ]+)/g, (match, repo) => {
-            info(`Found repo: ${repo}`)
-            return repo
-        })
+        const repositoryName = getRepo(reproductionSection)
+        if(!repositoryName) return info("No repo found")
 
         const token = getInput("repo-token") ?? process.env.GITHUB_TOKEN
         const client = getOctokit(token).rest
         client.issues.createComment({
             ...repo,
             issue_number: issue.number,
-            body: getStackblitzLinkMessage(linkRepo),
+            body: getStackblitzLinkMessage(repositoryName),
         })
 
-        return info(`Comment created for issue: ${issue.number} to the repo: ${linkRepo} on stackblitz`)
+        return info(`Comment created for issue: ${issue.number} to the repo: ${repositoryName} on stackblitz`)
     }
     catch (error) {
         setFailed(error instanceof Error ? error.message : "Unknown error")
