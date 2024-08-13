@@ -1,5 +1,5 @@
 name: reproduire-sur-stackblitz
-description: Generate a stackblitz link in issues with a github reprository reproduction.
+description: Generate a stackblitz link in issues with a github repository reproduction.
 author: huang-julien
 inputs:
   repo-token:
