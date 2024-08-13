@@ -29934,6 +29934,15 @@ const getStackblitzLinkMessage = (repo) => {
 Stackblitz link for the reproduction: [Stackblitz](https://stackblitz.com/github/${repo})
 `;
 };
+function splitMarkdownByHeadings(text) {
+  return text.replace(/\r\n/g, "\n").match(/(?<title>^#{1,6} .*)(?<content>(?:\n(?!#{1,6} ).*)*)/gm)?.map((v) => v.trim());
+}
+function getRepo(text) {
+  const url = /github\.com\/([^/ ]+\/[a-z]+)/.exec(text);
+  if (url && url.length) {
+    return url[0].split("github.com/")[1];
+  }
+}
 
 async function main() {
   try {
@@ -29946,30 +29955,23 @@ async function main() {
     } = context;
     if (pullRequest || !issue?.body)
       return coreExports.info("Not an issue or has no body.");
-    const result = issue.body.replace(/\r\n/g, "\n").match(/(?<title>^#{1,6} .*)(?<content>(?:\n(?!#{1,6} ).*)*)/gm)?.map((v) => v.trim());
-    coreExports.info("issue content --> " + issue.body);
+    const result = splitMarkdownByHeadings(issue.body);
     if (!result)
       return coreExports.info("No heading found");
-    coreExports.info("headings: " + JSON.stringify(result));
     const reproductionSection = result.find((v) => v.startsWith(coreExports.getInput("reproduction-heading")));
     if (!reproductionSection)
       return coreExports.info("No reproduction section found");
-    coreExports.info("Reproduction section:" + reproductionSection);
-    const ghLink = reproductionSection.match(/github\.com\/([^/ ]+\/[^/ ]+)/g);
-    if (!ghLink || !ghLink.length)
-      return coreExports.info("No github repo found");
-    const linkRepo = ghLink[0].replace(/github\.com\/([^/ ]+\/[^/ ]+)/g, (match, repo2) => {
-      coreExports.info(`Found repo: ${repo2}`);
-      return repo2;
-    });
+    const repositoryName = getRepo(reproductionSection);
+    if (!repositoryName)
+      return coreExports.info("No repo found");
     const token = coreExports.getInput("repo-token") ?? process.env.GITHUB_TOKEN;
     const client = getOctokit_1(token).rest;
     client.issues.createComment({
       ...repo,
       issue_number: issue.number,
-      body: getStackblitzLinkMessage(linkRepo)
+      body: getStackblitzLinkMessage(repositoryName)
     });
-    return coreExports.info(`Comment created for issue: ${issue.number} to the repo: ${linkRepo} on stackblitz`);
+    return coreExports.info(`Comment created for issue: ${issue.number} to the repo: ${repositoryName} on stackblitz`);
   } catch (error) {
     coreExports.setFailed(error instanceof Error ? error.message : "Unknown error");
   }
