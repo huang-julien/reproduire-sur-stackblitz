@@ -12,7 +12,7 @@ async function main() {
             }
         } = context
         if (pullRequest || !issue?.body) return info("Not an issue or has no body.")
-        const result = issue.body.match(/(?:\n|^)#{1,6}(?<title>.*\n)(?<content>(?:(?!^#{1,6}).|\n)*)/gm)?.map(v => v.trim())
+        const result = issue.body.match(/(?<title>^#{1,6} .*)(?<content>(?:\n(?!#{1,6} ).*)*)/gm)?.map(v => v.trim())
         info('issue content --> ' + issue.body)
          if (!result) return info("No heading found")
             info('headings: ' + JSON.stringify(result))
