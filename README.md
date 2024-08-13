@@ -1,5 +1,8 @@
 # reproduire-sur-stackblitz actions
 
+Github action that comment on issues with a github reproduction.
+The action will send a link to open the repository on stackblitz.
+
 ## Inputs
 
 ### repo-token
