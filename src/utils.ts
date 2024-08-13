@@ -8,6 +8,9 @@ export function splitMarkdownByHeadings(text: string) {
  return text.replace(/\r\n/g, '\n').match(/(?<title>^#{1,6} .*)(?<content>(?:\n(?!#{1,6} ).*)*)/gm)?.map(v => v.trim())   
 }
 
-export function getFirstGithubUrlByRegex(text: string) {
-    return text.match(/https?:\/\/(?:www\.)?github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+/)
+export function getRepo(text: string) {
+    const url = /github\.com\/([^/ ]+\/[a-z]+)/.exec(text)
+    if(url && url.length) {
+        return url[0].split('github.com/')[1]
+    }
 }

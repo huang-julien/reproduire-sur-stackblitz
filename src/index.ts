@@ -1,6 +1,6 @@
 import { setFailed, info, getInput } from "@actions/core"
 import { context, getOctokit } from "@actions/github"
-import { splitMarkdownByHeadings, getStackblitzLinkMessage, getFirstGithubUrlByRegex } from "./utils"
+import { splitMarkdownByHeadings, getStackblitzLinkMessage, getFirstGithubUrlByRegex, getRepo } from "./utils"
 
 async function main() {
     try {
@@ -19,23 +19,18 @@ async function main() {
         const reproductionSection = result.find(v => v.startsWith(getInput('reproduction-heading')))
         if (!reproductionSection) return info("No reproduction section found")
 
-        const ghLink = getFirstGithubUrlByRegex(reproductionSection)
-        if (!ghLink || !ghLink.length) return info("No github repo found")
-
-        const linkRepo = ghLink[0].replace(/github\.com\/([^/ ]+\/[^/ ]+) /g, (match, repo) => {
-            info(`Found repo: ${repo}`)
-            return repo
-        })
+        const repositoryName = getRepo(reproductionSection)
+        if(!repositoryName) return info("No repo found")
 
         const token = getInput("repo-token") ?? process.env.GITHUB_TOKEN
         const client = getOctokit(token).rest
         client.issues.createComment({
             ...repo,
             issue_number: issue.number,
-            body: getStackblitzLinkMessage(linkRepo),
+            body: getStackblitzLinkMessage(repositoryName),
         })
 
-        return info(`Comment created for issue: ${issue.number} to the repo: ${linkRepo} on stackblitz`)
+        return info(`Comment created for issue: ${issue.number} to the repo: ${repositoryName} on stackblitz`)
     }
     catch (error) {
         setFailed(error instanceof Error ? error.message : "Unknown error")
