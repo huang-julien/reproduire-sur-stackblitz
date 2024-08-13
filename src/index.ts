@@ -1,6 +1,6 @@
 import { setFailed, info, getInput } from "@actions/core"
 import { context, getOctokit } from "@actions/github"
-import { splitMarkdownByHeadings, getStackblitzLinkMessage, getFirstGithubUrlByRegex, getRepo } from "./utils"
+import { splitMarkdownByHeadings, getStackblitzLinkMessage, getRepo } from "./utils"
 
 async function main() {
     try {
