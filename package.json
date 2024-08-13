@@ -9,13 +9,13 @@
   "author": "",
   "license": "MIT",
   "private": true,
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.mjs",
   "exports": {
-    ".": "./dist/index.cjs"
+    ".": "./dist/index.mjs"
   },
   "files": [
     "dist",
-    "*.cjs"
+    "action.yml"
   ],
   "bugs": {
     "url": "https://github.com/huang-julien/reproduire-sur-stackblitz/issues"
