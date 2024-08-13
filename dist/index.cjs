@@ -29977,7 +29977,7 @@ async function main() {
     } = context;
     if (pullRequest || !issue?.body)
       return coreExports.info("Not an issue or has no body.");
-    const result = issue.body.match(/(?<title>^#{1,6} .*)(?<content>(?:\n(?!#{1,6} ).*)*)/gm)?.map((v) => v.trim());
+    const result = issue.body.replace(/\r\n/g, "\n").match(/(?<title>^#{1,6} .*)(?<content>(?:\n(?!#{1,6} ).*)*)/gm)?.map((v) => v.trim());
     coreExports.info("issue content --> " + issue.body);
     if (!result)
       return coreExports.info("No heading found");
