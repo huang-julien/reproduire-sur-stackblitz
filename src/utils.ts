@@ -9,7 +9,7 @@ export function splitMarkdownByHeadings(text: string) {
 }
 
 export function getRepo(text: string) {
-    const url = /github\.com\/([^/ ]+\/[a-z]+)/.exec(text)
+    const url = /github\.com\/([^/ ]+\/[a-z-0-9]+)/.exec(text)
     if(url && url.length) {
         return url[0].split('github.com/')[1]
     }
