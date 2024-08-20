@@ -1,6 +1,5 @@
 import { describe, it , expect } from "vitest"
 import { getRepo, splitMarkdownByHeadings } from "../src/utils"
- 
 
 describe('test get github repo', () => {
   it.each([
@@ -10,6 +9,32 @@ describe('test get github repo', () => {
   ])('should return the github repo', (text) => {
     expect(getRepo(text)).toBe('nuxt/scripts')
   })
+
+  it.each([
+    {
+      text: 'https://github.com/nuxt/scripts',
+      result: 'nuxt/scripts'
+    },
+    {
+      text: 'https://github.com/a-dash/some-repo',
+      result: 'a-dash/some-repo'
+    },
+    {
+      text: 'https://github.com/a-dash/some-repo.',
+      result: 'a-dash/some-repo'
+    },
+    {
+      text: 'https://github.com/a-dash/some-repo some text',
+      result: 'a-dash/some-repo'
+    },
+    {
+      text: 'https://github.com/a-dash/some-repo123 some text',
+      result: 'a-dash/some-repo123'
+    }
+  ])('should return the github repo', ({ text, result }) => {
+    expect(getRepo(text)).toBe(result)
+  })
+ 
 })
 
 describe('test markdow split', () => {
