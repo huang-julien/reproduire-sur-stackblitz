@@ -21,9 +21,15 @@ async function main() {
 
         const repositoryName = getRepo(reproductionSection)
         if(!repositoryName) return info("No repo found")
-
         const token = getInput("repo-token") ?? process.env.GITHUB_TOKEN
         const client = getOctokit(token).rest
+        const repositoryExist = await client.repos.get({
+            repo: repositoryName.split('/')[1],
+            owner: repositoryName.split('/')[0]
+        }).then(() => true).catch(() => false)
+
+        if (!repositoryExist) return info("No repo found")
+
         client.issues.createComment({
             ...repo,
             issue_number: issue.number,
