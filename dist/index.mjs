@@ -29938,7 +29938,7 @@ function splitMarkdownByHeadings(text) {
   return text.replace(/\r\n/g, "\n").match(/(?<title>^#{1,6} .*)(?<content>(?:\n(?!#{1,6} ).*)*)/gm)?.map((v) => v.trim());
 }
 function getRepo(text) {
-  const url = /github\.com\/([^/ ]+\/[a-z]+)/.exec(text);
+  const url = /github\.com\/([^/ ]+\/[a-z-0-9]+)/.exec(text);
   if (url && url.length) {
     return url[0].split("github.com/")[1];
   }
@@ -29966,6 +29966,12 @@ async function main() {
       return coreExports.info("No repo found");
     const token = coreExports.getInput("repo-token") ?? process.env.GITHUB_TOKEN;
     const client = getOctokit_1(token).rest;
+    const repositoryExist = await client.repos.get({
+      repo: repositoryName.split("/")[1],
+      owner: repositoryName.split("/")[0]
+    }).then(() => true).catch(() => false);
+    if (!repositoryExist)
+      return coreExports.info("No repo found");
     client.issues.createComment({
       ...repo,
       issue_number: issue.number,
