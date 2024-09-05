@@ -1,6 +1,6 @@
 {
   "name": "@huang-julien/reproduire-sur-stackblitz",
-  "version": "0.0.1",
+  "version": "1.0.2",
   "repository": "huang-julien/reproduire-sur-stackblitz",
   "description": "Github action that generate a stackblitz link in issues with a github repo",
   "scripts": {
